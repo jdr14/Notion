@@ -1,0 +1,3 @@
+# Used for the scripts required for automation with notion
+stravaio==0.0.9
+requests
