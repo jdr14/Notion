@@ -6,22 +6,10 @@ from datetime import datetime, timezone
 from config import NOTION_TOKEN, DATABASE_ID, NOTION_API_BASE_URL, NOTION_API_VERSION
 import requests
 
-VERBOSE = True
+VERBOSE = False
 
 class WorkoutData:
     def __init__(self, date, title, workout_type, distance, time_elapsed, calories, avg_speed, avg_power, elevation_gain):
-        # self._colors = {
-        #     "": "default",
-        #     None: "default",
-        #     "Run": "green",
-        #     "Walk": "yellow",
-        #     "Swim": "blue",
-        #     "Cycling": "red",
-        #     "Yoga": "pink",
-        #     "Other": "gray",
-        #     "StairStepper": "purple",
-        #     "WeightTraining": "brown",
-        # }
         self.date = date
         self.title = title
         self.workout_type = workout_type
@@ -31,7 +19,6 @@ class WorkoutData:
         self.avg_speed = avg_speed
         self.avg_power = avg_power
         self.elevation_gain = elevation_gain
-        # self.workout_color = self._colors[self.workout_type]
 
 class NotionClient:
     def __init__(self, token, version, base_url):
@@ -49,7 +36,10 @@ class NotionClient:
         if verbose:
             print(f"{response.status_code}: {response.text}".split(','))
         else:
-            print(f"{response.status_code}")
+            if response.status_code == 200:
+                print(f"Response code: {response.status_code} SUCCESS!")
+            else:
+                print(f"Response code: {response.status_code} FAILURE!")
         return response
 
     def create_database_page_entry(self, database_id, data: WorkoutData):
@@ -59,9 +49,7 @@ class NotionClient:
             "parent": {"database_id": database_id}, 
             "properties": {
                 "Completed": { "date": {"start": data.date.isoformat(), "end": None}},
-                # "Workout": { "rich_text": [{"text": {"content": data.title}}] },
                 "Workout": { "title": [ {"text": {"content": data.title} } ] },
-                # "Workout Type": { "title": data.workout_type, "type": data.workout_type },
                 "Workout Type": { "select": {"name": data.workout_type } },
                 "Distance": { "number": data.distance },
                 "Time Elapsed": { "number": data.time_elapsed },
@@ -141,7 +129,6 @@ class NotionClient:
 
 def main():
     # Mainly using this for testing purposes
-
     title = "Test Title"
     description = "Test Description"
     published_date = datetime.now().astimezone(timezone.utc).isoformat()
@@ -152,7 +139,7 @@ def main():
     }
     n = NotionClient(NOTION_TOKEN, NOTION_API_VERSION, NOTION_API_BASE_URL)
     # n.create_database_page_entry(DATABASE_ID, data)
-    n.search_pages()
+    # n.search_pages()
 
 # protect against automatically running if imported
 if __name__ == '__main__':

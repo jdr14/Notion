@@ -7,7 +7,7 @@ from notion import NotionClient, WorkoutData
 import json
 
 # Modify this macro to the year of the data you want to start with
-CURRENT_YEAR = 2023
+CURRENT_YEAR = 2021
 
 def main():
     # Get OAUTH token using the client ID and secret
@@ -30,11 +30,8 @@ def main():
 
     # Create and remember the databse id
     table = notion.create_database(parent_id=parent_id, db_title=str(year))
-    # db_id = notion.search_pages(query=str(year), _filter="database").json() 
     db_id = json.loads(table.text)["id"]
-    # print(f"\n{type(table.text)}")
-    # print(f"\n\n{json.loads(table.text)}")
-    # return
+
     for activity in activities:
         # Pull the year parsed from the activity data
         curr_year = int(activity.start_date_local.date().strftime("%Y"))
@@ -42,10 +39,11 @@ def main():
             year = curr_year # Update to the current year detected from the activity
             table = notion.create_database(parent_id=str(parent_id), db_title=str(year))
             db_id = json.loads(table.text)["id"]
-        # print(activity)
+
         if not activity.type:
             activity.type = "Other"
-        entry = WorkoutData(
+
+        data_entry = WorkoutData(
             activity.start_date,
             activity.name,
             activity.type,
@@ -56,9 +54,7 @@ def main():
             activity.average_watts,
             activity.total_elevation_gain,
         )
-        # print(type(activity.start_date))
-        # print(activity.start_date)
-        notion.create_database_page_entry(db_id, entry)
+        notion.create_database_page_entry(db_id, data_entry)
 
 if __name__ == '__main__':
     main()
