@@ -1,7 +1,7 @@
 from stravaio import strava_oauth2
 from stravaio import StravaIO
 
-from config import *
+from config import CLIENT_ID, CLIENT_SECRET
 from notion import NotionClient, WorkoutData
 
 import json
@@ -24,7 +24,6 @@ def main():
 
     # Search the notion pages for the 32 digit uid of the parent page
     parent_id = notion.search_pages(query="Fitness", _filter="page").json()["results"][0]["id"] 
-    print("\n\nPARENT ID : {}".format(parent_id))
 
     year = CURRENT_YEAR
 

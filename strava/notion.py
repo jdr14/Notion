@@ -1,8 +1,14 @@
 from datetime import datetime, timezone
-from config import NOTION_TOKEN, NOTION_API_BASE_URL, NOTION_API_VERSION
+from config import NOTION_TOKEN
 import requests
 
 VERBOSE = False
+
+# API pages URL
+NOTION_API_BASE_URL = "https://api.notion.com/v1"
+
+# Notion API version
+NOTION_API_VERSION = "2022-06-28"
 
 class WorkoutData:
     def __init__(self, date, title, workout_type, distance, time_elapsed, calories, avg_speed, avg_power, elevation_gain):
