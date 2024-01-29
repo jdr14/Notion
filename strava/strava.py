@@ -2,12 +2,15 @@ from stravaio import strava_oauth2
 from stravaio import StravaIO
 
 from config import CLIENT_ID, CLIENT_SECRET
+from public_config import NOTION_API_BASE_URL, NOTION_API_VERSION
 from notion import NotionClient, WorkoutData
 
 import json
 
 # Modify this macro to the year of the data you want to start with
 CURRENT_YEAR = 2021
+
+NOTION_PAGE_NAME = "Fitness"
 
 def main():
     # Get OAUTH token using the client ID and secret
@@ -23,7 +26,7 @@ def main():
     notion = NotionClient(NOTION_TOKEN, NOTION_API_VERSION, NOTION_API_BASE_URL)
 
     # Search the notion pages for the 32 digit uid of the parent page
-    parent_id = notion.search_pages(query="Fitness", _filter="page").json()["results"][0]["id"] 
+    parent_id = notion.search_pages(query=NOTION_PAGE_NAME, _filter="page").json()["results"][0]["id"] 
 
     year = CURRENT_YEAR
 
