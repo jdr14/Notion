@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from config import NOTION_TOKEN, DATABASE_ID, NOTION_API_BASE_URL, NOTION_API_VERSION
+from config import NOTION_TOKEN, NOTION_API_BASE_URL, NOTION_API_VERSION
 import requests
 
 VERBOSE = False
