@@ -1,7 +1,3 @@
-# from notion.block import CollectionViewBlock, PageBlock
-# from notion.client import NotionClient
-# from table_schema import SCHEMA
-
 from datetime import datetime, timezone
 from config import NOTION_TOKEN, DATABASE_ID, NOTION_API_BASE_URL, NOTION_API_VERSION
 import requests
