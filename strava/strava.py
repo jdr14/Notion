@@ -8,7 +8,7 @@ from notion import NotionClient, WorkoutData
 import json
 
 # Modify this macro to the year of the data you want to start with
-CURRENT_YEAR = 2021
+CURRENT_YEAR = 2024
 
 NOTION_PAGE_NAME = "Fitness"
 
@@ -23,12 +23,15 @@ def main():
     activities = client.get_logged_in_athlete_activities(after=f'{CURRENT_YEAR}-01-01T00:00:00Z')
 
     # Create a notion client object
-    notion = NotionClient(NOTION_TOKEN, NOTION_API_VERSION, NOTION_API_BASE_URL)
+    notion = NotionClient(NOTION_API_VERSION, NOTION_API_BASE_URL)
 
     # Search the notion pages for the 32 digit uid of the parent page
     parent_id = notion.search_pages(query=NOTION_PAGE_NAME, _filter="page").json()["results"][0]["id"] 
 
     year = CURRENT_YEAR
+
+    page_list = notion.get_databases_and_pages(parent_id=parent_id)
+    return 
 
     # Create and remember the databse id
     table = notion.create_database(parent_id=parent_id, db_title=str(year))

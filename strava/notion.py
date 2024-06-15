@@ -18,8 +18,8 @@ class WorkoutData:
         self.elevation_gain = elevation_gain
 
 class NotionClient:
-    def __init__(self, token, version, base_url):
-        self.token = token
+    def __init__(self, version, base_url):
+        self.token = NOTION_TOKEN
         self.version = version
         self.base_url = base_url
         self.headers = {
@@ -75,6 +75,26 @@ class NotionClient:
             # }
         }
         return self._get_response(search_url, payload, VERBOSE)
+    
+    def get_databases_and_pages(self, parent_id: str):
+        """
+        Returns a list of all databases and all pages associated with the notion connection
+        """
+        databases_url = f"{self.base_url}/query"
+        payload = {
+            "parent": {
+                "type": "page_id",
+                # This is the parent notion page id to parse this, use the search_pages and look at the corresponding response json key
+                "page_id": parent_id,
+            }, # end parent page id
+        }
+        response = self._get_response(databases_url, payload, VERBOSE)
+        databases = response.json()#["results"]
+        print(databases); return
+        pages = []
+        for database in databases:
+            pages.extend(self.get_databases_and_pages(database["id"]))
+        return pages
 
     def create_database(self, parent_id: str, db_title: str):
         """
